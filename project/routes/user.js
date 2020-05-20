@@ -116,10 +116,7 @@ router.patch("/", authenticationMiddleware, function (req, res) {
 });
 router.post("/login", async (req, res, next) => {
   // try{
-  const { name, email, password } = req.body;
-
-  const userName = await User.findOne({ name: name });
-  if (!userName) throw customErr("wrong email or name or password", 401);
+  const { email, password } = req.body;
   const user = await User.findOne({ email: email });
   if (!user) throw customErr("wrong email or name or password", 401);
   const isMatched = await user.comparePassword(password); //password
