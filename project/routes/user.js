@@ -92,8 +92,8 @@ router.post(
       });
   }
 );
-//edit User friends
-router.patch("/", authenticationMiddleware, function (req, res) {
+//add User friends
+router.patch("/addFriend", authenticationMiddleware, function (req, res) {
   const { friendId } = req.body;
   console.log(friendId);
   let friends = req.user.friends;
@@ -107,7 +107,30 @@ router.patch("/", authenticationMiddleware, function (req, res) {
     }
   )
     .then((data) => {
-      res.send({ msg: "friends was edited successfully", userUpdated: data });
+      res.send({ msg: "friends was added successfully", userUpdated: data });
+    })
+    .catch((err) => {
+      res.statusCode = 401;
+      res.send("friends is not exist");
+    });
+});//delete User friends
+router.patch("/deleteFriend", authenticationMiddleware, function (req, res) {
+  const { friendId } = req.body;
+  console.log(friendId);
+  let friends = req.user.friends;
+  // friends.push(friendId);
+  let deletedFriendInd = friends.findIndex(f => f._id == friendId )
+  friends.splice(deletedFriendInd,1);
+  console.log(friends);
+  let id = req.user.id;
+  User.findByIdAndUpdate(
+    { _id: id },
+    {
+      friends,
+    }
+  )
+    .then((data) => {
+      res.send({ msg: "friends was deleted successfully", userUpdated: data });
     })
     .catch((err) => {
       res.statusCode = 401;
