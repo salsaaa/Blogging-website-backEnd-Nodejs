@@ -54,7 +54,7 @@ router.get('/getByUserId/:id',authenticationMiddleware,async(req,res,next)=>{
     }
         console.log("userId",id)
         const blogs=await Blog.find({userId:id})
-        res.json({blogs,myProfile});
+        res.json({blogs,myProfile,authorName:req.user.name});
     }
     catch(err){
 next(err);
